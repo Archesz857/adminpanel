@@ -43,14 +43,27 @@
       <button class="filter-btn" data-f="cancelled">Cancelled</button>
       <button class="filter-btn" data-f="sales">Product Sales</button>
       <button class="filter-btn" data-f="support"><i class="fas fa-headset"></i> Support <span class="badge" id="supBadge" hidden>0</span></button>
+      <button class="filter-btn" data-f="feedback"><i class="fas fa-star"></i> Feedbacks</button>
+      <button class="filter-btn" data-f="users"><i class="fas fa-users"></i> Users</button>
     </div>
     <div class="hist-list" id="list"></div>
     <div id="supportBox" hidden></div>
-
-    <div class="panel-card" style="margin-top:22px">
-      <h2><i class="fas fa-user-plus"></i> Add Points to User</h2>
-      <div class="input-points"><input id="manPts" type="number" min="1" placeholder="Points to add"><span>pts</span></div>
-      <button class="btn btn-purple full-btn" id="manBtn"><i class="fas fa-plus"></i> Add Points</button>
+    <div id="usersBox" hidden>
+      <div class="panel-card chat-panel">
+        <h2><i class="fas fa-coins"></i> Add Coins</h2>
+        <label class="field-label" for="addMail">GMAIL ACCOUNTS</label>
+        <div class="field-box"><i class="fas fa-envelope"></i><input id="addMail" list="mailList" type="email" placeholder="USERGMAIL@gmail.com" autocomplete="off"><datalist id="mailList"></datalist></div>
+        <label class="field-label" for="addCoins">AMOUNT COINS</label>
+        <div class="input-points"><input id="addCoins" type="number" min="1" placeholder="0"><span>coins</span></div>
+        <button class="btn btn-purple full-btn" id="addBtn"><i class="fas fa-plus"></i> Add Coins</button>
+      </div>
+      <div class="panel-card chat-panel" style="margin-top:16px">
+        <h2><i class="fas fa-image"></i> Product Image (ARCHESZ v1.57)</h2>
+        <div class="sale-head" style="margin-bottom:12px"><div id="prodPrev"></div><small class="small-note">Your own picture. Shown in Shop, Done Buy and here.</small></div>
+        <div class="act-row"><button class="btn btn-cancel" id="prodDel"><i class="fas fa-trash"></i> Remove</button><button class="btn btn-ok" id="prodUp"><i class="fas fa-upload"></i> Upload picture</button></div>
+      </div>
+      <h3 style="margin:22px 0 10px">REGISTERED USERS <span class="plus" id="uCount" style="color:#ffcc46"></span></h3>
+      <div class="hist-list" id="userRows"></div>
     </div>
     <button class="link-btn" id="logout"><i class="fas fa-right-from-bracket"></i> Log out</button>
   </div>
