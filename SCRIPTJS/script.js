@@ -87,7 +87,7 @@ function initFX() {
   const c = document.createElement('canvas'); c.id = 'fx'; document.body.prepend(c);
   const x = c.getContext('2d'); let w, h;
   const size = () => { w = c.width = innerWidth; h = c.height = innerHeight; }; size(); addEventListener('resize', size);
-  const P = Array.from({ length: 46 }, (_, i) => ({ c: ['0,255,163','34,211,238','177,140,255','255,79,216'][i % 4], x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.8 + .4, v: Math.random() * .35 + .1, a: Math.random() * .5 + .15, d: Math.random() * 6 }));
+  const P = Array.from({ length: 46 }, (_, i) => ({ c: ['20,184,184','94,234,212','45,212,212','153,246,228'][i % 4], x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.8 + .4, v: Math.random() * .35 + .1, a: Math.random() * .5 + .15, d: Math.random() * 6 }));
   (function draw(t) {
     x.clearRect(0, 0, w, h);
     P.forEach((p) => {
