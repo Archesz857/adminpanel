@@ -21,14 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (j.code === 401) { sessionStorage.removeItem('arc_at'); return location.reload(); }
     if (!j.ok) return;
     const s = JSON.stringify(j); if (s === sig && !force) { if (tab === 'support') loadThread(); return; }
-    const oldUn = D.threads.reduce((a, t) => a + t.unread, 0); D = j; sig = s; PRODUCTS[0].img = D.prodImg;
+    const oldUn = D.threads.reduce((a, t) => a + t.unread, 0); D = j; sig = s; /* APK icon now comes from /ASSETS/apk-icon.png (same as the store) */
     const newUn = D.threads.reduce((a, t) => a + t.unread, 0); if (newUn > oldUn && tab !== 'support' && !force) toast('💬 New user support message');
     render();
   }
   const act = async (a, d, okMsg) => { const j = await api(a, d); if (!j.ok) { toast(j.err || 'Failed'); return j; } if (okMsg) toast(okMsg); await pull(true); return j; };
 
   // ---------- cards ----------
-  const mail = (h) => `<div class="kv"><b>GMAIL:</b><span>${escH(h.email)}</span></div>`;
+  const mail = (h) => `<div class="kv"><b>GMAIL:</b><span class="keep-case">${escH(h.email)}</span></div>`;
   const card = (h, i) => {
     const base = `style="animation-delay:${i * 70}ms"`;
     if (h.status === 'pending') return `
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="kv"><b>RECEIPT:</b><a data-view="${h.id}">${escH(h.name || 'receipt.jpg')}</a></div>
         ${h.receipt ? `<img class="thumb" data-img src="${h.receipt}" alt="Receipt">` : ''}
         <div class="kv"><b>AMOUNT:</b><span class="amt">${money(h.amount ?? h.pts)}</span></div>
-        <div class="kv"><b>TOP-UP:</b><span class="coins">+${h.pts.toLocaleString()} Coins</span></div>
+        <div class="kv"><b>TOP-UP:</b><span class="coins">+₱${h.pts.toLocaleString()}</span></div>
         <div class="act-row"><button class="btn btn-cancel" data-act="adm_cancel" data-id="${h.id}"><i class="fas fa-xmark"></i> Cancel Order</button>
         <button class="btn btn-ok" data-act="adm_approve" data-id="${h.id}"><i class="fas fa-check"></i> Approve</button></div>
       </div>`;
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="order-card ${flashId === h.id ? 'flash' : ''}" ${base}><div class="success-box"><h3>SUCCESSFUL ORDER</h3>${mail(h)}
         <div class="kv"><b>APPROVE DATE:</b><span>${ymd(h.approvedAt || h.ts)}</span></div>
         <div class="kv"><b>AMOUNT:</b><span class="amt">${money(h.amount ?? 0)}</span></div>
-        <div class="kv"><b>POINTS ADD:</b><span class="coins">${h.pts.toLocaleString()} Coins</span></div>
+        <div class="kv"><b>FUNDS ADD:</b><span class="coins">₱${h.pts.toLocaleString()}</span></div>
         <div class="big">✅ APPROVED ORDER</div></div></div>`;
     return `<div class="order-card" ${base}><div class="success-box cancel"><h3>CANCELLED ORDER</h3><div class="kv"><b>ORDER ID:</b><span>${h.id}</span></div>${mail(h)}<div class="kv"><b>AMOUNT:</b><span class="amt">${money(h.amount ?? 0)}</span></div><div class="big">❌ ORDER CANCELLED</div></div></div>`;
   };
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const L = $('#list');
     if (tab === 'sales') L.innerHTML = D.purchases.length ? D.purchases.map((p, i) => `
       <div class="order-card" style="animation-delay:${i * 70}ms"><div class="order-top"><div class="sale-head">${pIcon(prodOf(p.product))}<h3>${escH(p.product)}</h3></div><span class="pill approved">${escH(p.plan)}</span></div>
-      <div class="kv"><b>ORDER ID:</b><span>${p.id}</span></div>${mail(p)}<div class="kv"><b>DATE:</b><span>${ymd(p.ts)}</span></div><div class="kv"><b>PAID:</b><span class="coins">${p.pts} Points</span></div></div>`).join('') : empty('fa-box-open', 'No product sales yet.');
+      <div class="kv"><b>ORDER ID:</b><span>${p.id}</span></div>${mail(p)}<div class="kv"><b>DATE:</b><span>${ymd(p.ts)}</span></div><div class="kv"><b>PAID:</b><span class="coins">₱${p.pts}</span></div></div>`).join('') : empty('fa-box-open', 'No product sales yet.');
     else if (tab === 'feedback') L.innerHTML = D.fbs.length ? D.fbs.map((f, i) => `
       <div class="order-card fb-card" style="animation-delay:${i * 60}ms"><div class="order-top"><h3 class="fb-mail">${escH(f.email)}</h3><span class="fb-stars">${stars(f.stars)}</span></div>
       <p class="fb-text">${escH(f.text)}</p>${f.img ? `<img class="thumb" data-img src="${f.img}" alt="feedback">` : ''}<small class="fb-time">${fmtTime(f.ts)}</small>
@@ -79,11 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#uCount').textContent = '+' + D.users.length;
     $('#prodPrev').innerHTML = pIcon(PRODUCTS[0]);
     $('#userRows').innerHTML = D.users.length ? D.users.map((u, i) => `<div class="hist-item" style="animation-delay:${i * 50}ms"><div class="menu-icon purple-icon">${escH(u.email[0].toUpperCase())}</div>
-      <div class="hist-info"><h3 style="word-break:break-all">${escH(u.email)}</h3><p><span class="${u.online ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${u.online ? 'Online' : 'Offline'}</span></p></div>
-      <div class="hist-right"><span class="hist-pts">${u.coins.toLocaleString()}</span><span class="pill approved">coins</span></div></div>`).join('') : empty('fa-users', 'No registered users yet.');
+      <div class="hist-info"><h3 class="keep-case" style="word-break:break-all">${escH(u.email)}</h3><p><span class="${u.online ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${u.online ? 'Online' : 'Offline'}</span></p></div>
+      <div class="hist-right"><span class="hist-pts">₱${u.coins.toLocaleString()}</span><span class="pill approved">wallet</span></div></div>`).join('') : empty('fa-users', 'No registered users yet.');
   }
   $('#addBtn').addEventListener('click', async () => {
-    const j = await act('adm_add', { email: $('#addMail').value, coins: $('#addCoins').value }); if (j.ok) { toast(`✅ +${Number($('#addCoins').value).toLocaleString()} coins added. New balance: ${j.coins.toLocaleString()}`); $('#addCoins').value = ''; }
+    const j = await act('adm_add', { email: $('#addMail').value, coins: $('#addCoins').value }); if (j.ok) { toast(`✅ +${Number($('#addCoins').value).toLocaleString()} added to wallet.  New balance: ${j.coins.toLocaleString()}`); $('#addCoins').value = ''; }
   });
   const pickProd = document.createElement('input'); pickProd.type = 'file'; pickProd.accept = 'image/png,image/jpeg'; pickProd.hidden = true; document.body.appendChild(pickProd);
   $('#prodUp').addEventListener('click', () => pickProd.click());
@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const online = (e) => D.users.find((u) => u.email === e)?.online;
     $('#supNew').textContent = '+' + T.reduce((a, t) => a + t.unread, 0); $('#supChat').hidden = !thread;
     $('#supUsers').innerHTML = T.length ? T.map((t) => `<div class="sup-user ${t.email === thread ? 'active' : ''}" data-e="${escH(t.email)}"><div class="menu-icon purple-icon">${escH(t.email[0].toUpperCase())}</div>
-      <div class="hist-info"><h3>${escH(t.email)} • <span class="${online(t.email) ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${online(t.email) ? 'Online' : 'Offline'}</span></h3><p>${escH(t.last.text || '📷 image')}</p></div>${t.unread && t.email !== thread ? `<span class="badge">${t.unread}</span>` : ''}</div>`).join('') : empty('fa-headset', 'No user support yet.');
-    if (thread) { $('#supWho').innerHTML = `${escH(thread)} • <span class="${online(thread) ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${online(thread) ? 'Online' : 'Offline'}</span>`; loadThread(); }
+      <div class="hist-info"><h3><span class="keep-case">${escH(t.email)}</span> • <span class="${online(t.email) ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${online(t.email) ? 'Online' : 'Offline'}</span></h3><p>${escH(t.last.text || '📷 image')}</p></div>${t.unread && t.email !== thread ? `<span class="badge">${t.unread}</span>` : ''}</div>`).join('') : empty('fa-headset', 'No user support yet.');
+    if (thread) { $('#supWho').innerHTML = `<span class="keep-case">${escH(thread)}</span> • <span class="${online(thread) ? 'on-txt' : 'off-txt'}"><i class="on-dot"></i>${online(thread) ? 'Online' : 'Offline'}</span>`; loadThread(); }
   }
   async function loadThread(force) {
     if (!thread) return; const j = await api('adm_chat', { email: thread }); if (!j.ok) return;
@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   $('#supportBox').addEventListener('click', (e) => {
     const u = e.target.closest('.sup-user'); if (u) { thread = u.dataset.e; tsig = ''; return renderSupport(); }
+    const lic = e.target.closest('[data-sendlic]'); if (lic) { const i = $('#supIn'); i.value = `YOUR LICENCE (${lic.dataset.product} - ${lic.dataset.plan}): `; i.focus(); toast('PASTE THE LICENCE KEY, THEN SEND ✅'); return; }
     if (e.target.closest('#supAttach')) return pk.click(); if (e.target.closest('#supSend')) return supSend(); if (e.target.id === 'supRm') { aImg = null; supChip(); }
   });
   $('#supportBox').addEventListener('keydown', (e) => { if (e.target.id === 'supIn' && e.key === 'Enter') { e.preventDefault(); supSend(); } });
