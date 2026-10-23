@@ -13,60 +13,57 @@
 <script src="../SCRIPTJS/admin.js" defer></script>
 </head>
 <body data-role="admin">
-<div class="container">
+<header class="adm-head">
+  <a class="sh-brand" href="#"><img src="/ASSETS/homepage-icon.png" alt="" onerror="this.style.display='none'"><span class="sh-name"><b>ARCH<em>ESZ</em></b><small>OFFICIAL</small></span></a>
+  <span class="adm-badge">ADMIN</span>
+  <button class="adm-out" id="logout" title="Log out" hidden><i class="fas fa-right-from-bracket"></i></button>
+</header>
+<main class="adm-wrap">
 
   <!-- LOGIN GATE -->
-  <div id="gate" class="panel-card">
-    <div class="vip-badge"><span class="dot"></span> ARCHESZ ADMIN</div>
-    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+  <section id="gate" class="panel-card adm-gate">
+    <img src="/ASSETS/login.png" alt="" onerror="this.style.display='none'">
+    <h2><i class="fas fa-lock"></i> ADMIN LOGIN</h2>
     <div class="field-box"><i class="fas fa-key"></i><input id="pass" type="password" placeholder="Admin passcode"></div>
     <p class="warn-note" id="passErr" hidden>Wrong passcode.</p>
-    <button class="btn btn-purple full-btn" id="loginBtn"><i class="fas fa-right-to-bracket"></i> Enter</button>
-  </div>
+    <button class="btn btn-purple full-btn" id="loginBtn"><i class="fas fa-right-to-bracket"></i> ENTER</button>
+  </section>
 
   <!-- DASHBOARD -->
   <div id="app" hidden>
-    <div class="hero-card">
-      <div class="vip-badge"><span class="dot"></span> ARCHESZ ADMIN PANEL</div>
-      <h1>Order <span class="text-green">Control</span></h1>
-      <div class="stats-row">
-        <div class="stat-item"><div class="stat-bar"></div><b id="stPend">0</b><p>Pending</p></div>
-        <div class="stat-item"><div class="stat-bar"></div><b id="stDone">0</b><p>Approved</p></div>
-        <div class="stat-item"><div class="stat-bar"></div><b id="stCoins">0</b><p>Funds Added</p></div>
-        <div class="stat-item"><div class="stat-bar"></div><b id="stSales">0</b><p>Product Sales</p></div>
-      </div>
+    <div class="adm-title"><h2>ORDER CONTROL</h2><span class="live-pill"><i class="dot-s on" style="margin:0"></i> LIVE</span></div>
+    <div class="adm-stats">
+      <div class="adm-stat warn"><div class="ai"><i class="fas fa-hourglass-half"></i></div><div><b id="stPend">0</b><small>PENDING</small></div></div>
+      <div class="adm-stat ok"><div class="ai"><i class="fas fa-circle-check"></i></div><div><b id="stDone">0</b><small>APPROVED</small></div></div>
+      <div class="adm-stat"><div class="ai"><i class="fas fa-wallet"></i></div><div><b id="stCoins">0</b><small>FUNDS ADDED</small></div></div>
+      <div class="adm-stat"><div class="ai"><i class="fas fa-bag-shopping"></i></div><div><b id="stSales">0</b><small>PRODUCT SALES</small></div></div>
     </div>
 
-    <div class="filter-btns" id="tabs">
-      <button class="filter-btn active" data-f="pending">Pending</button>
-      <button class="filter-btn" data-f="approved">Approved</button>
-      <button class="filter-btn" data-f="cancelled">Cancelled</button>
-      <button class="filter-btn" data-f="sales">Product Sales</button>
-      <button class="filter-btn" data-f="support"><i class="fas fa-headset"></i> Support <span class="badge" id="supBadge" hidden>0</span></button>
-      <button class="filter-btn" data-f="feedback"><i class="fas fa-star"></i> Feedbacks</button>
-      <button class="filter-btn" data-f="users"><i class="fas fa-users"></i> Users</button>
+    <div class="adm-tabs" id="tabs">
+      <button class="chip active" data-f="pending"><i class="fas fa-hourglass-half"></i> PENDING <em id="cPend">0</em></button>
+      <button class="chip" data-f="approved"><i class="fas fa-circle-check"></i> APPROVED <em id="cDone">0</em></button>
+      <button class="chip" data-f="cancelled"><i class="fas fa-circle-xmark"></i> CANCELLED <em id="cBad">0</em></button>
+      <button class="chip" data-f="sales"><i class="fas fa-bag-shopping"></i> PRODUCT SALES <em id="cSales">0</em></button>
+      <button class="chip" data-f="support"><i class="fas fa-headset"></i> SUPPORT <span class="badge" id="supBadge" hidden>0</span></button>
+      <button class="chip" data-f="feedback"><i class="fas fa-star"></i> FEEDBACKS <em id="cFb">0</em></button>
+      <button class="chip" data-f="users"><i class="fas fa-users"></i> USERS <em id="cUsers">0</em></button>
     </div>
-    <div class="hist-list" id="list"></div>
+
+    <div id="list"></div>
     <div id="supportBox" hidden></div>
     <div id="usersBox" hidden>
-      <div class="panel-card chat-panel">
-        <h2><i class="fas fa-coins"></i> Add Funds</h2>
+      <section class="panel-card adm-card">
+        <h3><i class="fas fa-circle-plus"></i> ADD FUNDS TO A USER</h3>
         <label class="field-label" for="addMail">GMAIL ACCOUNTS</label>
         <div class="field-box"><i class="fas fa-envelope"></i><input id="addMail" list="mailList" type="email" placeholder="USERGMAIL@gmail.com" autocomplete="off"><datalist id="mailList"></datalist></div>
         <label class="field-label" for="addCoins">AMOUNT (₱)</label>
         <div class="input-points"><input id="addCoins" type="number" min="1" placeholder="0"><span>₱</span></div>
-        <button class="btn btn-purple full-btn" id="addBtn"><i class="fas fa-plus"></i> Add Funds</button>
-      </div>
-      <div class="panel-card chat-panel" style="margin-top:16px">
-        <h2><i class="fas fa-image"></i> Product Image (ARCHESZ v1.57)</h2>
-        <div class="sale-head" style="margin-bottom:12px"><div id="prodPrev"></div><small class="small-note">Your own picture. Shown in Shop, Done Buy and here.</small></div>
-        <div class="act-row"><button class="btn btn-cancel" id="prodDel"><i class="fas fa-trash"></i> Remove</button><button class="btn btn-ok" id="prodUp"><i class="fas fa-upload"></i> Upload picture</button></div>
-      </div>
-      <h3 style="margin:22px 0 10px">REGISTERED USERS <span class="plus" id="uCount" style="color:#ffcc46"></span></h3>
-      <div class="hist-list" id="userRows"></div>
+        <button class="btn btn-purple full-btn" id="addBtn" style="margin-top:12px"><i class="fas fa-plus"></i> ADD FUNDS</button>
+      </section>
+      <h3 class="adm-h">REGISTERED USERS <em id="uCount">0</em></h3>
+      <div id="userRows"></div>
     </div>
-    <button class="link-btn" id="logout"><i class="fas fa-right-from-bracket"></i> Log out</button>
   </div>
-</div>
+</main>
 </body>
 </html>
